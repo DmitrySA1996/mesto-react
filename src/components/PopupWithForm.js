@@ -1,21 +1,47 @@
-import './App.js';
+import Popup from "../components/Popup.js"
 
-function PopupWithForm(props) {
+export default class PopupWithForm extends Popup {
+  constructor(selector, callbackSubmit) {
+    super(selector)
+    this._callbackSubmit = callbackSubmit;
+    this._form = this._popup.querySelector(".popup__form");
+    this._inputs = this._form.querySelectorAll(".popup__text");
+    this._submit = this._form.querySelector(".popup__submit");
+  }
 
-    return (
-        <div className={`${props.name} ${props.isOpen ? "popup__opened" : ""}`}>
-            <div className="popup__container">
-                <button className="popup__close" type="button" />
-                <form className="popup__form" name={props.name}>
-                    <h2 className="popup__title">{props.title}</h2>
-                    {props.children}
-                    <button className="popup__submit" type="submit">
-                        {props.buttonText}
-                    </button>
-                </form>
-            </div>
-        </div>
+  _getInputValues() {
+    this._values = {};
+    this._inputs.forEach((input) => {
+      this._values[input.name] = input.value
+    })
+    return this._values;
+  }
+
+  setInputValues(data) {
+    this._inputs.forEach((input) => {
+      input.value = data[input.name]
+    })
+  }
+
+  changeTextSubmitUsSave(popup) {
+    popup._submit.textContent = "Сохранение..."
+  }
+
+  resetSubmitTextToDefault(popup) {
+    popup._submit.textContent = "Сохранить"
+  }
+
+  close() {
+    super.close()
+    this._form.reset()
+  }
+
+  setEventListeners() {
+    super.setEventListeners();
+    this._form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      this._callbackSubmit(this._getInputValues());
+    }
     )
+  }
 }
-
-export default PopupWithForm;
