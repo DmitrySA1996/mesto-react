@@ -19,9 +19,7 @@ const formUpdateAvatar = document.forms.editAvatarForm
 //константы профиля
 const editInputName = document.querySelector(".profile__title");
 const editJobInput = document.querySelector(".profile__subtitle");
-const editAvatar = document.querySelector(".profile__image");
-
-const elementTemplate = document.querySelector('.element-template').content.querySelector('.elements__card');
+const avatar = document.querySelector(".profile__image");
 
 const popupConfig = {
   popupEditSelector: ".popup",
@@ -29,11 +27,6 @@ const popupConfig = {
   popupImageSelector: ".popup_type_card",
   popupUpdateAvatarSelector: ".popup_type_update-avatar",
   popupDeleteSelector: ".popup_type_confirmation"
-}
-
-const elementsApi = {
-  token: '4c774ee9-4e81-4dc7-a921-f3ea6d42f00e',
-  URL: 'https://mesto.nomoreparties.co/v1/cohort-61'
 }
 
 export {
@@ -46,8 +39,6 @@ export {
   formUpdateAvatar,
   editInputName,
   editJobInput,
-  editAvatar,
-  settings,
-  elementTemplate,
-  elementsApi
+  avatar,
+  settings
 }

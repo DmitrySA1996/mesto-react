@@ -1,16 +1,13 @@
-import './App.js';
-
-function PopupWithImage() {
-    
-    return (
-        <div class="popup popup_type_card">
-            <div class="popup__container popup__container_theme_image">
-                <button type="button" class="popup__close"></button>
-                <img class="popup__image" />
-                <p class="popup__sign"></p>
-            </div>
-        </div>
-    )
+function ImagePopup({ card, onClose }) {
+  return (
+    <div className="popup popup_type_image">
+      <figure className="popup__image-container">
+        <img className="popup__image" src={card.link} alt={card.name} />
+        <figcaption className="popup__image-title">{card.name}</figcaption>
+        <button className="popup__close" type="button" onClick={onClose} />
+      </figure>
+    </div>
+  )
 }
 
-export default PopupWithImage;
+export default ImagePopup

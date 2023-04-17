@@ -1,47 +1,21 @@
-import Popup from "../components/Popup.js"
+import './App.js';
 
-export default class PopupWithForm extends Popup {
-  constructor(selector, callbackSubmit) {
-    super(selector)
-    this._callbackSubmit = callbackSubmit;
-    this._form = this._popup.querySelector(".popup__form");
-    this._inputs = this._form.querySelectorAll(".popup__text");
-    this._submit = this._form.querySelector(".popup__submit");
-  }
+function PopupWithForm(props) {
 
-  _getInputValues() {
-    this._values = {};
-    this._inputs.forEach((input) => {
-      this._values[input.name] = input.value
-    })
-    return this._values;
-  }
-
-  setInputValues(data) {
-    this._inputs.forEach((input) => {
-      input.value = data[input.name]
-    })
-  }
-
-  changeTextSubmitUsSave(popup) {
-    popup._submit.textContent = "Сохранение..."
-  }
-
-  resetSubmitTextToDefault(popup) {
-    popup._submit.textContent = "Сохранить"
-  }
-
-  close() {
-    super.close()
-    this._form.reset()
-  }
-
-  setEventListeners() {
-    super.setEventListeners();
-    this._form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      this._callbackSubmit(this._getInputValues());
-    }
+    return (
+        <div className={`${props.name} ${props.isOpen ? "popup_opened" : ""}`}>
+            <div className="popup__container">
+                <button className="popup__close" type="button" onClick={props.onClose}/>
+                <form className="popup__form" name={props.name}>
+                    <h2 className="popup__title">{props.title}</h2>
+                    {props.children}
+                    <button className="popup__submit" type="submit">
+                        {props.buttonText}
+                    </button>
+                </form>
+            </div>
+        </div>
     )
-  }
 }
+
+export default PopupWithForm;
