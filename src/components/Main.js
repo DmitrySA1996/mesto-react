@@ -51,7 +51,7 @@ function Main({
                         <Card
                             card={card}
                             onCardClick={onCardClick}
-                            key={card.id}
+                            key={card._id}
                         />
                     ))}
                 </ul>

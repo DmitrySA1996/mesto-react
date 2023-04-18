@@ -1,5 +1,3 @@
-
-
 function Card({card, onCardClick}) {
     
   function handleCardClick() {
