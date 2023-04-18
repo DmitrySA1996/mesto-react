@@ -1,7 +1,6 @@
 import React from 'react';
 import api from '../utils/API';
 import Card from '../components/Card.js';
-import './App.js';
 
 import pencil from '../images/pencil.svg';
 
@@ -18,25 +17,12 @@ function Main({
     const [cards, setCards] = React.useState([]);
 
     React.useEffect(() => {
-        Promise.all([api.getRealUserInfo()])
-            .then(([userProfile]) => {
+        Promise.all([api.getRealUserInfo(), api.getInitialCards()])
+            .then(([userProfile, cards]) => {
                 setUserName(userProfile.name)
                 setUserAvatar(userProfile.avatar)
                 setUserDescription(userProfile.about)
-            })
-            .catch((error) => console.log(`Ошибка: ${error}`))
-        api
-            .getInitialCards()
-            .then((data) => {
-                setCards(
-                    data.map((card) => ({
-                        _id: card._id,
-                        name: card.name,
-                        link: card.link,
-                        likes: card.likes,
-                        owner: card.owner,
-                    }))
-                )
+                setCards(cards)
             })
             .catch((error) => console.log(`Ошибка: ${error}`))
     }, []);
@@ -65,6 +51,7 @@ function Main({
                         <Card
                             card={card}
                             onCardClick={onCardClick}
+                            key={card.id}
                         />
                     ))}
                 </ul>
