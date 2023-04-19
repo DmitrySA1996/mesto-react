@@ -11,13 +11,13 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false)
-  const [selectedCard, setSelectedCard] = React.useState({})
+  const [selectedCard, setSelectedCard] = React.useState(null)
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
     setIsEditAvatarPopupOpen(false)
-    setSelectedCard({})
+    setSelectedCard(null)
   }
 
   return (
@@ -39,11 +39,11 @@ function App() {
           onClose={closeAllPopups}
         >
           <input type="text" name="name" value="" placeholder="Имя" id="title" className="popup__text 
-                        popup__text_type_title" minLength="2" maxLength="40" required />
+                        popup__text_type_title" minLength="2" maxLength="40" required readOnly={true}/>
           <span className="title-error popup__text-error"></span>
 
           <input type="text" name="about" value="" placeholder="О себе" id="subtitle"
-            className="popup__text popup__text_type_subtitle" minLength="2" maxLength="200" required />
+            className="popup__text popup__text_type_subtitle" minLength="2" maxLength="200" required readOnly={true}/>
           <span className="subtitle-error popup__text-error"></span>
         </PopupWithForm>
         <PopupWithForm
@@ -54,11 +54,11 @@ function App() {
           onClose={closeAllPopups}
         >
           <input type="text" name="name" value="" placeholder="Название" id="title-image"
-            className="popup__text popup__text_type_title" minLength="2" maxLength="30" required />
+            className="popup__text popup__text_type_title" minLength="2" maxLength="30" required readOnly={true}/>
           <span className="title-image-error popup__text-error"></span>
 
           <input type="url" name="link" value="" id="link" placeholder="Ссылка на картинку"
-            className="popup__text popup__text_type_subtitle" required />
+            className="popup__text popup__text_type_subtitle" required readOnly={true}/>
           <span className="link-error popup__text-error"></span>
         </PopupWithForm>
         <PopupWithForm
@@ -69,7 +69,7 @@ function App() {
           onClose={closeAllPopups}
         >
           <input type="url" name="avatar" value="" id="avatar"
-            className="popup__text popup__text_type_subtitle" placeholder="Введите ссылку URL" required />
+            className="popup__text popup__text_type_subtitle" placeholder="Введите ссылку URL" required readOnly={true}/>
           <span className="avatar-error popup__text-error"></span>
         </PopupWithForm>
         <PopupWithForm
