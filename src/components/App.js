@@ -5,10 +5,13 @@ import Main from "./Main.js";
 import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
+import EditProfilePopup from "./EditProfilePopup.js";
+
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import api from "../utils/API";
 
 function App() {
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
@@ -25,6 +28,17 @@ function App() {
   };
 
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const [currentUser, setCurrentUser] = React.useState(CurrentUserContext);
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    Promise.all([api.getRealUserInfo(), api.getInitialCards()])
+      .then(([userProfile, cards]) => {
+        setCurrentUser(userProfile);
+        setCards(cards);
+      })
+      .catch((error) => console.log(`Ошибка: ${error}`));
+  }, []);
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
@@ -33,53 +47,58 @@ function App() {
     setSelectedCard(null);
   }
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((user) => user._id === currentUser._id)
+
+    if (isLiked) {
+      api
+        .removeLike(card._id)
+        .then((newCard) =>
+          setCards((state) =>
+            state.map((item) => (item._id === card._id ? newCard : item))
+          )
+        )
+        .catch((error) => console.log(`Ошибка: ${error}`))
+    } else {
+      api
+        .addLike(card._id)
+        .then((newCard) =>
+          setCards((state) =>
+            state.map((item) => (item._id === card._id ? newCard : item))
+          )
+        )
+        .catch((error) => console.log(`Ошибка: ${error}`))
+    }
+  }
+
+  function handleCardDelete(card) {
+    api
+      .removeCard(card._id)
+      .then(() => {
+        setCards((state) => state.filter((item) => item._id !== card._id))
+        closeAllPopups()
+      })
+      .catch((error) => console.log(`Ошибка: ${error}`))
+  }
+
   return (
     <div className="main">
       <div className="page">
         <Header />
-        <Main
-          onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={setSelectedCard}
-        />
+        <CurrentUserContext.Provider value={currentUser}>
+          <Main
+            onEditAvatar={handleEditAvatarClick}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onCardClick={setSelectedCard}
+            onCardLike={handleCardLike}
+            cards={cards}
+            currentUser={currentUser}
+            onCardDelete={handleCardDelete}
+          />
+        </CurrentUserContext.Provider>
         <Footer />
-        <PopupWithForm
-          name=""
-          title="Редактировать профиль"
-          buttonText="Сохранение"
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-        >
-          <input
-            type="text"
-            name="name"
-            value=""
-            placeholder="Имя"
-            id="title"
-            className="popup__text 
-                        popup__text_type_title"
-            minLength="2"
-            maxLength="40"
-            required
-            readOnly={true}
-          />
-          <span className="title-error popup__text-error"></span>
-
-          <input
-            type="text"
-            name="about"
-            value=""
-            placeholder="О себе"
-            id="subtitle"
-            className="popup__text popup__text_type_subtitle"
-            minLength="2"
-            maxLength="200"
-            required
-            readOnly={true}
-          />
-          <span className="subtitle-error popup__text-error"></span>
-        </PopupWithForm>
+        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
         <PopupWithForm
           name="popup_type_image"
           title="Новое место"
