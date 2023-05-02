@@ -1,19 +1,21 @@
 import React from "react";
 import Card from "../components/Card.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 import pencil from "../images/pencil.svg";
 
-function Main({ 
-  onEditAvatar, 
-  onEditProfile, 
-  onAddPlace, 
-  onCardClick, 
-  onCardLike, 
-  cards, 
-  currentUser, 
-  onCardDelete 
+function Main({
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardClick,
+  onCardLike,
+  cards,
+  onCardDelete
 }) {
-  
+
+  const currentUser = React.useContext(CurrentUserContext);
+
   return (
     <main className="content">
       <section className="profile">
@@ -52,13 +54,13 @@ function Main({
       <section className="elements">
         <ul className="elements__cards">
           {cards.map((card) => (
-            <Card 
-            card={card} 
-            onCardClick={onCardClick} 
-            onCardLike={onCardLike} 
-            currentUser={currentUser} 
-            onCardDelete={onCardDelete}
-            key={card._id} />
+            <Card
+              card={card}
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              currentUser={currentUser}
+              onCardDelete={onCardDelete}
+              key={card._id} />
           ))}
         </ul>
       </section>
